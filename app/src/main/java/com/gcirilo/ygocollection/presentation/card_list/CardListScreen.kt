@@ -6,14 +6,12 @@ import androidx.compose.foundation.lazy.grid.LazyGridItemScope
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.gcirilo.ygocollection.data.local.CardQuery
+import com.gcirilo.ygocollection.domain.model.CardQuery
 import com.gcirilo.ygocollection.domain.model.CardListing
 import com.gcirilo.ygocollection.presentation.card_list.components.CardListItem
 import com.gcirilo.ygocollection.presentation.ui.theme.YGOCollectionTheme

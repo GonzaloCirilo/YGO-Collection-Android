@@ -37,7 +37,7 @@ object DataModule {
             .apply {
                 if (BuildConfig.DEBUG) {
                     val logging = HttpLoggingInterceptor().apply {
-                        level = HttpLoggingInterceptor.Level.BODY
+                        level = HttpLoggingInterceptor.Level.BASIC
                     }
                     val httpClient = OkHttpClient.Builder()
                         .addInterceptor(logging).build()

@@ -1,19 +1,19 @@
 package com.gcirilo.ygocollection.data.repository
 
-import androidx.paging.ExperimentalPagingApi
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import com.gcirilo.ygocollection.data.local.CardEntity
-import com.gcirilo.ygocollection.data.local.CardQuery
+import androidx.paging.*
+import com.gcirilo.ygocollection.domain.model.CardQuery
 import com.gcirilo.ygocollection.data.local.YGOCollectionDatabase
+import com.gcirilo.ygocollection.data.mapper.toCard
 import com.gcirilo.ygocollection.data.mapper.toCardEntity
 import com.gcirilo.ygocollection.data.mapper.toCardListing
 import com.gcirilo.ygocollection.data.remote.YGOCardService
+import com.gcirilo.ygocollection.domain.model.Card
 import com.gcirilo.ygocollection.domain.model.CardListing
 import com.gcirilo.ygocollection.domain.repository.CardRepository
 import com.gcirilo.ygocollection.util.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
@@ -28,22 +28,14 @@ class CardRepositoryImpl @Inject constructor(
 
     private val cardDao = db.cardsDao
 
-    override suspend fun getCards(fetchFromRemote: Boolean, query: String): Flow<Resource<List<CardListing>>> {
+    override suspend fun getCard(id: Long): Flow<Resource<Card>> {
         return flow {
             emit(Resource.Loading(true))
-            val localCards = cardDao.searchCards(query)
-            emit(Resource.Success(localCards.map { it.toCardListing() }))
+            val localCard = cardDao.getCard(id)
+            emit(Resource.Success(localCard.toCard()))
 
-            val isCardsEmpty = localCards.isEmpty() && query.isBlank()
-            val shouldJustLoadFromCache = !isCardsEmpty && !fetchFromRemote
-
-            if(shouldJustLoadFromCache){
-                emit(Resource.Loading(false))
-                return@flow
-            }
-
-            val remoteCards = try {
-                val response = cardService.getCards(emptyMap())
+            val remoteCard = try {
+                val response = cardService.getCard(id)
                 response.data
             } catch (e: IOException) {
                 e.printStackTrace()
@@ -54,20 +46,26 @@ class CardRepositoryImpl @Inject constructor(
                 emit(Resource.Error(message = e.localizedMessage ?:""))
                 null
             }
-
-            remoteCards?.let { cards ->
-                emit(Resource.Success(cards.map { it.toCardEntity().toCardListing() }))
+            remoteCard?.let { card ->
+                cardDao.insertCards(listOf(card.toCardEntity()))
+                emit(Resource.Success(
+                    data = cardDao.getCard(id).toCard()
+                ))
                 emit(Resource.Loading(false))
             }
         }
     }
 
-    override fun getCardsPaged(cardQuery: CardQuery): Pager<Int, CardEntity> {
+    override fun getCardsPaged(cardQuery: CardQuery): Flow<PagingData<CardListing>> {
         return Pager(
             config = PagingConfig(pageSize = cardQuery.pageSize, initialLoadSize = cardQuery.pageSize),
             remoteMediator = CardRemoteMediator(cardService = cardService, database = db, cardQuery = cardQuery)
         ){
             db.cardsDao.searchCardsPaged(cardQuery.toSQLiteQuery())
+        }.flow.map { pagingData->
+            pagingData.map {
+                it.toCardListing()
+            }
         }
     }
 }

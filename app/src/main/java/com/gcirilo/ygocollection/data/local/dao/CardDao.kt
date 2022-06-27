@@ -15,10 +15,10 @@ interface CardDao {
     suspend fun clearCards()
 
     @Query("""
-        SELECT * FROM card_entity 
-        WHERE LOWER(archetype) LIKE '%' || LOWER(:archetype) || '%'
-    """ )
-    suspend fun searchCards(archetype: String): List<CardEntity>
+        SELECT * FROM card_entity
+        WHERE id LIKE :id
+    """)
+    suspend fun getCard(id: Long): CardEntity
 
     @RawQuery(observedEntities = [CardEntity::class])
     fun searchCardsPaged(query: SupportSQLiteQuery): PagingSource<Int, CardEntity>

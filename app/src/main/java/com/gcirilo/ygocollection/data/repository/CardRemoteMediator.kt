@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.paging.*
 import androidx.room.withTransaction
 import com.gcirilo.ygocollection.data.local.CardEntity
-import com.gcirilo.ygocollection.data.local.CardQuery
+import com.gcirilo.ygocollection.domain.model.CardQuery
 import com.gcirilo.ygocollection.data.local.RemoteKey
 import com.gcirilo.ygocollection.data.local.YGOCollectionDatabase
 import com.gcirilo.ygocollection.data.mapper.toCardEntity

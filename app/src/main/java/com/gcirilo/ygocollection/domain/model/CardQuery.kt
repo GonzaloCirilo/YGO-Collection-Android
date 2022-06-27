@@ -1,13 +1,12 @@
-package com.gcirilo.ygocollection.data.local
+package com.gcirilo.ygocollection.domain.model
 
 import androidx.sqlite.db.SimpleSQLiteQuery
 import androidx.sqlite.db.SupportSQLiteQuery
 
 data class CardQuery(
-    val archetype: String? = "Elemental HERO",
+    val archetype: String? = "Destiny HERO",
     val pageSize: Int = 20,
 ) {
-    private var offset: Int? = null
 
     /**
      * Generates a string of the query params to be stored
@@ -36,9 +35,10 @@ data class CardQuery(
         else
             page
         val map = mutableMapOf<String, String>()
+        val offset = (pageSize * (currentPage - 1))
         archetype?.let { map.put("archetype", archetype) }
         map["num"] = pageSize.toString()
-        map["offset"] = (pageSize * (currentPage - 1)).toString()
+        map["offset"] = offset.toString()
         map["sort"] = "name"
         return map
     }
