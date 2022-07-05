@@ -5,6 +5,7 @@ import androidx.sqlite.db.SupportSQLiteQuery
 
 data class CardQuery(
     val archetype: String? = "Destiny HERO",
+    val cardName: String? = "",
     val pageSize: Int = 20,
 ) {
 
@@ -17,6 +18,8 @@ data class CardQuery(
     fun toRemoteKeyString(): String {
         val queryParamsStr = mutableListOf<String>()
         archetype?.let { queryParamsStr.add("archetype=$archetype") }
+        cardName?.let { if (it.isNotBlank() && it.isNotEmpty()) queryParamsStr.add("fname=$cardName") }
+        cardName?.let {  }
         return queryParamsStr.joinToString(prefix = "?", separator = "&")
     }
 
@@ -37,6 +40,7 @@ data class CardQuery(
         val map = mutableMapOf<String, String>()
         val offset = (pageSize * (currentPage - 1))
         archetype?.let { map.put("archetype", archetype) }
+        cardName?.let { if (it.isNotBlank() && it.isNotEmpty()) map.put("fname", cardName) }
         map["num"] = pageSize.toString()
         map["offset"] = offset.toString()
         map["sort"] = "name"
@@ -49,6 +53,12 @@ data class CardQuery(
         archetype?.let {
             queryString += " WHERE LOWER(archetype) LIKE LOWER(?)"
             bindings.add(archetype)
+        }
+        cardName?.let {
+            if (it.isNotBlank() && it.isNotEmpty()) {
+                queryString += " AND LOWER(name) LIKE '%' || LOWER(?) || '%'"
+                bindings.add(cardName)
+            }
         }
         queryString += " ORDER BY name ASC"
         return SimpleSQLiteQuery(queryString, bindings.toTypedArray())

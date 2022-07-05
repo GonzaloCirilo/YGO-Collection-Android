@@ -1,5 +1,6 @@
 package com.gcirilo.ygocollection.data.remote
 
+import com.gcirilo.ygocollection.data.remote.dto.ArchetypeDto
 import com.gcirilo.ygocollection.data.remote.dto.CardDto
 import com.gcirilo.ygocollection.data.remote.dto.YGOAPIResponse
 import com.gcirilo.ygocollection.domain.model.CardFilters
@@ -19,4 +20,7 @@ interface YGOCardService {
     suspend fun getCard(
         @Query("id") id: Long
     ): YGOAPIResponse<CardDto>
+
+    @GET("archetypes.php")
+    suspend fun getArchetypes(): List<ArchetypeDto>
 }

@@ -1,14 +1,11 @@
 package com.gcirilo.ygocollection.presentation.card_list.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
@@ -24,8 +21,7 @@ fun CardListItem(card: CardListing) {
             contentDescription = card.name,
             modifier = Modifier.fillMaxWidth()
         ) {
-            val state = painter.state
-            when (state){
+            when (painter.state){
                 is AsyncImagePainter.State.Loading, is AsyncImagePainter.State.Error ->
                 {
                     CircularProgressIndicator()
