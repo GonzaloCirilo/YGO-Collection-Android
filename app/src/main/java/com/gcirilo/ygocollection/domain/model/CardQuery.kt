@@ -50,17 +50,21 @@ data class CardQuery(
     fun toSQLiteQuery(): SupportSQLiteQuery {
         var queryString = "SELECT * FROM card_entity"
         val bindings = mutableListOf<Any>()
+        val queryFilterStrings = mutableListOf<String>()
         archetype?.let {
-            queryString += " WHERE LOWER(archetype) LIKE LOWER(?)"
+            queryFilterStrings += "LOWER(archetype) LIKE LOWER(?)"
             bindings.add(archetype)
         }
         cardName?.let {
             if (it.isNotBlank() && it.isNotEmpty()) {
-                queryString += " AND LOWER(name) LIKE '%' || LOWER(?) || '%'"
+                queryFilterStrings += "LOWER(name) LIKE '%' || LOWER(?) || '%'"
                 bindings.add(cardName)
             }
         }
-        queryString += " ORDER BY name ASC"
+        val queryOrderString = " ORDER BY name ASC"
+        if(queryFilterStrings.isNotEmpty())
+            queryString += queryFilterStrings.joinToString(separator = " AND ", prefix = " WHERE ")
+        queryString += queryOrderString
         return SimpleSQLiteQuery(queryString, bindings.toTypedArray())
     }
 

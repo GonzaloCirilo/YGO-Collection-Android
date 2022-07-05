@@ -47,7 +47,7 @@ fun CardListScreenContent(
             onFilterFocusChange = { filterSurface = it },
             onEvent = onEvent,
         )
-        CardQueryItemsLayout(state)
+        CardQueryItemsLayout(state = state, onEvent = onEvent)
         Box(modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 2.dp),
