@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
+import com.gcirilo.ygocollection.domain.model.CardRace
 import com.gcirilo.ygocollection.domain.use_case.get_archetypes.GetArchetypesUseCase
 import com.gcirilo.ygocollection.domain.use_case.get_cards.GetCardsUseCase
 import com.gcirilo.ygocollection.util.Resource
@@ -44,11 +45,23 @@ class CardListViewModel @Inject constructor(
                 _state.value = _state.value.copy(
                     query = when(event.query){
                         is CardQueryItemType.ArchetypeFilter -> {
-                            _state.value.query.copy(archetype = event.query.value)
+                            _state.value.query.copy(archetype = event.query.stringValue)
                         }
                         is CardQueryItemType.NameSearch -> {
                             searchCardQueryDelay = 750L // delay for name to avoid calling API in short period of time
-                            _state.value.query.copy(cardName = event.query.value)
+                            _state.value.query.copy(cardName = event.query.stringValue)
+                        }
+                        is CardQueryItemType.RaceFilter -> {
+                            val newList: List<CardRace> = if(!event.query.shouldBeRemoved){
+                                val aux = _state.value.query.races?.toMutableList()
+                                aux?.add(CardRace.valueOf(event.query.stringValue.orEmpty()))
+                                aux?.toList().orEmpty()
+                            } else {
+                                Log.d("HEYYYYY", event.query.stringValue.orEmpty())
+                                _state.value.query
+                                    .races?.filter { event.query.stringValue != it.name }.orEmpty()
+                            }
+                            _state.value.query.copy(races = newList)
                         }
                     },
                     filterQuery = if(event.query is CardQueryItemType.NameSearch)
@@ -68,12 +81,13 @@ class CardListViewModel @Inject constructor(
                     _state.value = _state.value.copy(isLoading = false)
                 }
             }
-            is CardListEvent.OnArchetypeChange -> {
+            is CardListEvent.OnFilterQueryChange -> {
                 _state.value = _state.value.copy(filterQuery = event.query)
                 searchArchetypeJob?.cancel()
                 searchArchetypeJob = viewModelScope.launch {
                     delay(500L)
                     getArchetypes()
+                    filterMonsterSpellTrapCardRace()
                 }
             }
             is CardListEvent.Refresh -> {}
@@ -100,6 +114,20 @@ class CardListViewModel @Inject constructor(
 
             }
         }
+
+    }
+
+    private fun filterMonsterSpellTrapCardRace(query: String = state.value.filterQuery.lowercase()){
+        _state.value = _state.value.copy(
+            monsterCardRaces = CardRace.monsterCardRaces().filter
+            {
+                it.toString().lowercase().contains(query)
+            },
+            spellTrapCardRaces = CardRace.spellTrapCardRaces().filter
+            {
+                it.toString().lowercase().contains(query)
+            }
+        )
 
     }
 }

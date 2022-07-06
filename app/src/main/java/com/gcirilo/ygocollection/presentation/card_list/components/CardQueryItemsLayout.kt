@@ -1,7 +1,6 @@
 package com.gcirilo.ygocollection.presentation.card_list.components
 
 import androidx.compose.animation.*
-import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -39,12 +38,30 @@ fun CardQueryItemsLayout(
             .fillMaxWidth()) {
             items(cardQueryItemTypes){ cardQueryItem ->
                 Chip(onClick = {
-                    onEvent(CardListEvent.OnCardQueryChange(CardQueryItemType.ArchetypeFilter(null)))
+                    when(cardQueryItem){
+                        is CardQueryItemType.ArchetypeFilter -> {
+                            onEvent(CardListEvent.OnCardQueryChange(CardQueryItemType.ArchetypeFilter(null)))
+                        }
+                        is CardQueryItemType.RaceFilter -> {
+                            onEvent(CardListEvent.OnCardQueryChange(
+                                CardQueryItemType.RaceFilter(
+                                    cardQueryItem.stringValue.orEmpty(),
+                                    cardQueryItem.label.orEmpty(),
+                                    true,
+                                )
+                            ))
+                        }
+                        else -> {}
+                    }
                 }) {
-                    if(cardQueryItem is CardQueryItemType.ArchetypeFilter)
-                        Text(text = cardQueryItem.value.orEmpty())
-                    else
-                        Text(text = cardQueryItem.label.orEmpty())
+                    when(cardQueryItem){
+                        is CardQueryItemType.ArchetypeFilter -> {
+                            Text(text = cardQueryItem.stringValue.orEmpty())
+                        }
+                        else -> {
+                            Text(text = cardQueryItem.label.orEmpty())
+                        }
+                    }
                 }
             }
         }

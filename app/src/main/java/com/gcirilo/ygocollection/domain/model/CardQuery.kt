@@ -4,10 +4,14 @@ import androidx.sqlite.db.SimpleSQLiteQuery
 import androidx.sqlite.db.SupportSQLiteQuery
 
 data class CardQuery(
-    val archetype: String? = "Destiny HERO",
+    val archetype: String? = null,
     val cardName: String? = "",
     val pageSize: Int = 20,
+    val races: List<CardRace>? = emptyList()
 ) {
+
+    private val racesStrings: List<String>
+    get() = races?.map { it.toString() }.orEmpty()
 
     /**
      * Generates a string of the query params to be stored
@@ -19,7 +23,7 @@ data class CardQuery(
         val queryParamsStr = mutableListOf<String>()
         archetype?.let { queryParamsStr.add("archetype=$archetype") }
         cardName?.let { if (it.isNotBlank() && it.isNotEmpty()) queryParamsStr.add("fname=$cardName") }
-        cardName?.let {  }
+        races?.let { if (races.isNotEmpty()) queryParamsStr.add("race=${racesStrings.joinToString(",")}") }
         return queryParamsStr.joinToString(prefix = "?", separator = "&")
     }
 
@@ -40,7 +44,8 @@ data class CardQuery(
         val map = mutableMapOf<String, String>()
         val offset = (pageSize * (currentPage - 1))
         archetype?.let { map.put("archetype", archetype) }
-        cardName?.let { if (it.isNotBlank() && it.isNotEmpty()) map.put("fname", cardName) }
+        cardName?.let { if (it.isNotBlank() && it.isNotEmpty()) map["fname"] = cardName }
+        races?.let { if (races.isNotEmpty()) map["race"] = racesStrings.joinToString(",") }
         map["num"] = pageSize.toString()
         map["offset"] = offset.toString()
         map["sort"] = "name"
@@ -60,6 +65,15 @@ data class CardQuery(
                 queryFilterStrings += "LOWER(name) LIKE '%' || LOWER(?) || '%'"
                 bindings.add(cardName)
             }
+        }
+        races?.let {
+            if (races.isNotEmpty()) {
+                queryFilterStrings += racesStrings.map { race ->
+                    bindings.add(race)
+                    "LOWER(race) LIKE LOWER(?)"
+                }.joinToString(separator = " OR ", prefix = "(", postfix = ")")
+            }
+
         }
         val queryOrderString = " ORDER BY name ASC"
         if(queryFilterStrings.isNotEmpty())

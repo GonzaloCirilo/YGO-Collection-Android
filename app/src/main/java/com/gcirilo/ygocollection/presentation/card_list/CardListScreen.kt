@@ -52,7 +52,7 @@ fun CardListScreenContent(
             .fillMaxSize()
             .padding(horizontal = 2.dp),
         ){
-            ArchetypeList(
+            FilterOptionsList(
                 state = state,
                 filterSurface = filterSurface,
                 onEvent = { query, showFilterSurface ->

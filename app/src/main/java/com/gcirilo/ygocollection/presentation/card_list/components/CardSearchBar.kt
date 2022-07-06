@@ -80,11 +80,11 @@ fun CardSearchBar(
             },
             trailingIcon = {
                 ClearTextTrailingIcon(text = filterSearch, onClick = {
-                    onEvent(CardListEvent.OnArchetypeChange(""))
+                    onEvent(CardListEvent.OnFilterQueryChange(""))
                 })
             },
             onValueChange = {
-                onEvent(CardListEvent.OnArchetypeChange(it))
+                onEvent(CardListEvent.OnFilterQueryChange(it))
             },
             maxLines = 1,
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
