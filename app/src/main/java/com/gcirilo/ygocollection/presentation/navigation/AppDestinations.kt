@@ -67,7 +67,7 @@ sealed class Screen(route: String, val title: String, private val args: List<Arg
             override var key: String,
             override var type: NavType<*> = NavType.StringType
         ) : Arguments {
-            CardId(key = "cardId"),
+            CardId(key = "cardId", type = NavType.LongType),
         }
     }
 
