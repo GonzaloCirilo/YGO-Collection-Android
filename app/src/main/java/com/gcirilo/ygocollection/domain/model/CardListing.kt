@@ -1,6 +1,7 @@
 package com.gcirilo.ygocollection.domain.model
 
 data class CardListing(
+    val id: Long,
     var name: String,
     var type: String,
     val imageUrl: String = "",

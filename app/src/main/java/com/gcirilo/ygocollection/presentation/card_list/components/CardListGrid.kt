@@ -12,11 +12,12 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.gcirilo.ygocollection.domain.model.CardListing
+import com.gcirilo.ygocollection.presentation.card_list.CardListEvent
 import com.gcirilo.ygocollection.presentation.ui.theme.YGOCollectionTheme
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
-fun CardListGrid(cards: LazyPagingItems<CardListing>){
+fun CardListGrid(cards: LazyPagingItems<CardListing>, onEvent: (CardListEvent) -> Unit = {}){
     LazyVerticalGrid(
         columns = GridCells.Adaptive(128.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -24,7 +25,7 @@ fun CardListGrid(cards: LazyPagingItems<CardListing>){
     ) {
         items(cards){ card ->
             card?.let {
-                CardListItem(card = card)
+                CardListItem(card = card, onEvent)
             }
         }
     }

@@ -11,23 +11,32 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
 import com.gcirilo.ygocollection.presentation.card_list.CardListScreen
+import com.gcirilo.ygocollection.presentation.navigation.NavGraphDestinations
+import com.gcirilo.ygocollection.presentation.navigation.mainNavGraph
 import com.gcirilo.ygocollection.presentation.ui.theme.YGOCollectionTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 @ExperimentalMaterialApi
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             YGOCollectionTheme {
+                val navController = rememberNavController()
+
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    CardListScreen()
+                    NavHost(navController, startDestination = NavGraphDestinations.Main.route) {
+                        mainNavGraph(navController)
+                    }
                 }
             }
         }

@@ -2,31 +2,54 @@ package com.gcirilo.ygocollection.presentation.card_list
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavController
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.gcirilo.ygocollection.domain.model.CardListing
 import com.gcirilo.ygocollection.presentation.card_list.components.*
 import com.gcirilo.ygocollection.presentation.ui.theme.YGOCollectionTheme
+import com.gcirilo.ygocollection.presentation.card_list.CardListViewModel.NavTarget.*
+import com.gcirilo.ygocollection.presentation.navigation.Screen.*
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 
 
 @ExperimentalMaterialApi
 @Composable
-fun CardListScreen(){
+fun CardListScreen(navController: NavController){
     val viewModel: CardListViewModel = hiltViewModel()
     val state: CardListState by viewModel.state
     val cards = viewModel.getPagedCards.collectAsLazyPagingItems()
+    val localLifecycleOwner = LocalLifecycleOwner.current
     CardListScreenContent(cards = cards, state = state, onEvent = { viewModel.onEvent(it) })
+
+    LaunchedEffect(key1 = Unit){
+        localLifecycleOwner.lifecycleScope.launch{
+            localLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModel.navEvent.collect{
+                    when(it){
+                        is CardDetail -> navController.navigate(
+                            CardDetailDestination.createRoute(
+                                mapOf(
+                                    CardDetailDestination.Args.CardId to it.cardId
+                                )
+                            )
+                        )
+                    }
+                }
+            }
+        }
+    }
 }
 
 @ExperimentalMaterialApi
@@ -60,7 +83,7 @@ fun CardListScreenContent(
                     onEvent(query)
                 }
             )
-            CardListGrid(cards = cards)
+            CardListGrid(cards = cards, onEvent = onEvent)
         }
 
     }

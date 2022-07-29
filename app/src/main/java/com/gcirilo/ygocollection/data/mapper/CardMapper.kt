@@ -13,7 +13,7 @@ fun CardEntity.toCard(): Card {
 }
 
 fun CardEntity.toCardListing(): CardListing{
-    return CardListing(name, type, imageUrl, atk, def, level, scale, linkval)
+    return CardListing(id, name, type, imageUrl, atk, def, level, scale, linkval)
 }
 
 fun CardDto.toCardEntity(): CardEntity {

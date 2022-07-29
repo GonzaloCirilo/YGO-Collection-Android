@@ -13,6 +13,8 @@ import com.gcirilo.ygocollection.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,6 +23,10 @@ class CardListViewModel @Inject constructor(
     private val getCards: GetCardsUseCase,
     private val retrieveArchetypes: GetArchetypesUseCase
 ): ViewModel() {
+
+    sealed class NavTarget {
+        class CardDetail(val cardId: Long): NavTarget()
+    }
 
     private var _state = mutableStateOf(CardListState())
     val state: State<CardListState> = _state
@@ -31,6 +37,9 @@ class CardListViewModel @Inject constructor(
     private var searchArchetypeJob: Job? = null
     private var searchCardQueryJob: Job? = null
     private var searchCardQueryDelay = 0L
+
+    private var _navEvent = MutableSharedFlow<NavTarget>()
+    val navEvent: SharedFlow<NavTarget> = _navEvent
 
     init {
         viewModelScope.launch {
@@ -91,6 +100,11 @@ class CardListViewModel @Inject constructor(
                 }
             }
             is CardListEvent.Refresh -> {}
+            is CardListEvent.onCardSelected -> {
+                viewModelScope.launch {
+                    _navEvent.emit(NavTarget.CardDetail(event.cardId))
+                }
+            }
         }
     }
 
