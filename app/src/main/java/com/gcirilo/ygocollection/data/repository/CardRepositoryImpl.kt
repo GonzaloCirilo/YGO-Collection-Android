@@ -47,7 +47,7 @@ class CardRepositoryImpl @Inject constructor(
                 null
             }
             remoteCard?.let { card ->
-                cardDao.insertCards(listOf(card.toCardEntity()))
+                cardDao.insertCards(listOf(card.first().toCardEntity()))
                 emit(Resource.Success(
                     data = cardDao.getCard(id).toCard()
                 ))

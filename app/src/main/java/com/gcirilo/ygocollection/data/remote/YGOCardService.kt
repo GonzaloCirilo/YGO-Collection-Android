@@ -18,7 +18,7 @@ interface YGOCardService {
     @GET("cardinfo.php")
     suspend fun getCard(
         @Query("id") id: Long
-    ): YGOAPIResponse<CardDto>
+    ): YGOAPIResponse<List<CardDto>>
 
     @GET("archetypes.php")
     suspend fun getArchetypes(): List<ArchetypeDto>
