@@ -3,8 +3,10 @@ package com.gcirilo.ygocollection.di
 import androidx.paging.ExperimentalPagingApi
 import com.gcirilo.ygocollection.data.repository.ArchetypeRepositoryImpl
 import com.gcirilo.ygocollection.data.repository.CardRepositoryImpl
+import com.gcirilo.ygocollection.data.repository.CollectionRepositoryImpl
 import com.gcirilo.ygocollection.domain.repository.ArchetypeRepository
 import com.gcirilo.ygocollection.domain.repository.CardRepository
+import com.gcirilo.ygocollection.domain.repository.CollectionRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -24,5 +26,9 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun providesArchetypeRepository(cardRepositoryImpl: ArchetypeRepositoryImpl): ArchetypeRepository
+
+    @Binds
+    @Singleton
+    abstract fun provideCollectionRepository(collectionRepositoryImpl: CollectionRepositoryImpl): CollectionRepository
 
 }

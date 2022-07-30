@@ -2,17 +2,19 @@ package com.gcirilo.ygocollection.data.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.gcirilo.ygocollection.data.local.dao.ArchetypeDao
-import com.gcirilo.ygocollection.data.local.dao.CardDao
-import com.gcirilo.ygocollection.data.local.dao.RemoteKeyDao
+import com.gcirilo.ygocollection.data.local.dao.*
+import com.gcirilo.ygocollection.domain.model.Collection
 
 @Database(
     entities = [
         CardEntity::class,
         RemoteKey::class,
         ArchetypeEntity::class,
+        CardCollectionEntity::class,
+        CollectionEntity::class,
     ],
-    version = 2
+    version = 3,
+    exportSchema = false,
 )
 abstract class YGOCollectionDatabase: RoomDatabase() {
 
@@ -21,4 +23,8 @@ abstract class YGOCollectionDatabase: RoomDatabase() {
     abstract fun remoteKeysDao(): RemoteKeyDao
 
     abstract fun archetypeDao(): ArchetypeDao
+
+    abstract fun collectionDao(): CollectionDao
+
+    abstract fun cardCollectionDao(): CardCollectionDao
 }
