@@ -100,7 +100,7 @@ class CardListViewModel @Inject constructor(
                 }
             }
             is CardListEvent.Refresh -> {}
-            is CardListEvent.onCardSelected -> {
+            is CardListEvent.OnCardSelected -> {
                 viewModelScope.launch {
                     _navEvent.emit(NavTarget.CardDetail(event.cardId))
                 }

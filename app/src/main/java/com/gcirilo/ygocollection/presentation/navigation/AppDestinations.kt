@@ -6,8 +6,9 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.gcirilo.ygocollection.domain.model.CollectionForm
 
-sealed class Screen(route: String, val title: String, private val args: List<Arguments> = emptyList()) {
+sealed class Screen(route: String, val title: String? = null, private val args: List<Arguments> = emptyList()) {
 
     /**
      * Creates a route of an instance of an Screen object according to
@@ -38,7 +39,9 @@ sealed class Screen(route: String, val title: String, private val args: List<Arg
 
         this.args.forEach {
             val value = args?.get(it)
-            address = address.replace("{${it.key}}", value.toString())
+            if(value != null){
+                address = address.replace("{${it.key}}", value.toString())
+            }
         }
         Log.d(Screen::class.java.simpleName, address)
         return address
@@ -58,9 +61,8 @@ sealed class Screen(route: String, val title: String, private val args: List<Arg
     // MARK: Screens
 
     object CardDetailDestination : Screen(
-        "cardDetail",
-        "",
-        Args.values().toList()
+        route = "cardDetail",
+        args = Args.values().toList()
     ) {
         enum class Args(
             override var isOptional: Boolean = false,
@@ -68,6 +70,19 @@ sealed class Screen(route: String, val title: String, private val args: List<Arg
             override var type: NavType<*> = NavType.StringType
         ) : Arguments {
             CardId(key = "cardId", type = NavType.LongType),
+        }
+    }
+
+    object CollectionFormDestination: Screen(
+        route = "collectionFormDialog",
+        args = Args.values().toList()
+    ){
+        enum class Args(
+            override var isOptional: Boolean = false,
+            override var key: String,
+            override var type: NavType<*> = NavType.StringType
+        ) : Arguments {
+            CollectionId(key = "collectionId", type = NavType.LongType, isOptional = true),
         }
     }
 
@@ -81,7 +96,7 @@ sealed class Screen(route: String, val title: String, private val args: List<Arg
 sealed class BottomNavScreen(withRoute: String, val icon: ImageVector, title: String):
     Screen(withRoute, title) {
         object CardListDestination: BottomNavScreen("cardList", Icons.Filled.Menu, "Cards")
-        object Profile: BottomNavScreen("profile", Icons.Filled.Menu, "Perfil")
+        object CollectionListDestination: BottomNavScreen("collections", Icons.Filled.Menu, "Collections")
 }
 
 sealed class NavGraphDestinations(val route: String) {

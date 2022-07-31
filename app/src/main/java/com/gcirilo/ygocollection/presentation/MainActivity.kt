@@ -4,16 +4,18 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.gcirilo.ygocollection.presentation.card_list.CardListScreen
+import com.gcirilo.ygocollection.presentation.navigation.BottomNavScreen
 import com.gcirilo.ygocollection.presentation.navigation.NavGraphDestinations
 import com.gcirilo.ygocollection.presentation.navigation.mainNavGraph
 import com.gcirilo.ygocollection.presentation.ui.theme.YGOCollectionTheme
@@ -28,17 +30,54 @@ class MainActivity : ComponentActivity() {
         setContent {
             YGOCollectionTheme {
                 val navController = rememberNavController()
-
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    NavHost(navController, startDestination = NavGraphDestinations.Main.route) {
-                        mainNavGraph(navController)
+                Scaffold(
+                    bottomBar = { BottomBarNavigation(navController = navController) },
+                ) { paddingValues ->
+                    // A surface container using the 'background' color from the theme
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(paddingValues),
+                        color = MaterialTheme.colors.background
+                    ) {
+                        NavHost(navController, startDestination = NavGraphDestinations.Main.route) {
+                            mainNavGraph(navController)
+                        }
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun BottomBarNavigation(navController: NavController) {
+    val navigationItems = listOf(
+        BottomNavScreen.CardListDestination,
+        BottomNavScreen.CollectionListDestination,
+    )
+    BottomNavigation {
+        val navStackEntry by navController.currentBackStackEntryAsState()
+        val currentRoute = navStackEntry?.destination?.route
+        navigationItems.forEach { item ->
+            BottomNavigationItem(
+                icon = { Icon(imageVector = item.icon, contentDescription = item.title) },
+                label = { Text(text = item.title.orEmpty()) },
+                alwaysShowLabel = true,
+                selected = currentRoute == item.route,
+                onClick = {
+                    navController.navigate(item.route) {
+                        popUpTo(0) {
+                            saveState = true
+                        }
+                        // Avoid multiple copies of the same destination when
+                        // reselecting the same item
+                        launchSingleTop = true
+                        // Restore state when reselecting a previously selected item
+                        restoreState = true
+                    }
+                }
+            )
         }
     }
 }

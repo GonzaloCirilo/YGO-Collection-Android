@@ -7,7 +7,10 @@ import com.gcirilo.ygocollection.data.mapper.toCollectionCards
 import com.gcirilo.ygocollection.data.mapper.toCollectionEntity
 import com.gcirilo.ygocollection.domain.model.Collection
 import com.gcirilo.ygocollection.domain.model.CollectionCards
+import com.gcirilo.ygocollection.domain.model.CollectionForm
 import com.gcirilo.ygocollection.domain.repository.CollectionRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -19,8 +22,10 @@ class CollectionRepositoryImpl @Inject constructor(
     private val collectionDao = db.collectionDao()
     private val cardCollectionDao = db.cardCollectionDao()
 
-    override suspend fun getCollections(): List<Collection> {
-        return collectionDao.getCollections().map { it.toCollection() }
+    override fun getCollections(): Flow<List<Collection>> {
+        return collectionDao.getCollections().map {
+            it.map { item -> item.toCollection() }
+        }
     }
 
     override suspend fun deleteCollection(collection: Collection) {
@@ -31,7 +36,7 @@ class CollectionRepositoryImpl @Inject constructor(
         return collectionDao.getCollection(id).toCollectionCards()
     }
 
-    override suspend fun saveCollection(collection: Collection) {
+    override suspend fun saveCollection(collection: CollectionForm) {
         collectionDao.insertCollection(collection.toCollectionEntity())
     }
 

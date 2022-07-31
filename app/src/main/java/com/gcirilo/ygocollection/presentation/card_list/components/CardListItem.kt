@@ -22,7 +22,7 @@ fun CardListItem(card: CardListing, onEvent: (CardListEvent) -> Unit = {}) {
             model = card.imageUrl,
             contentDescription = card.name,
             modifier = Modifier.fillMaxWidth().clickable {
-                onEvent(CardListEvent.onCardSelected(card.id))
+                onEvent(CardListEvent.OnCardSelected(card.id))
             }
         ) {
             when (painter.state){

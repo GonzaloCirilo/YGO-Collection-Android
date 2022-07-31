@@ -3,6 +3,7 @@ package com.gcirilo.ygocollection.data.local.dao
 import androidx.room.*
 import com.gcirilo.ygocollection.data.local.CollectionAndAllCards
 import com.gcirilo.ygocollection.data.local.CollectionEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CollectionDao {
@@ -20,7 +21,7 @@ interface CollectionDao {
     @Query("""
         SELECT * FROM collection_entity
     """)
-    suspend fun getCollections(): List<CollectionEntity>
+    fun getCollections(): Flow<List<CollectionAndAllCards>>
 
     @Delete
     suspend fun deleteCollections(vararg collection: CollectionEntity)
