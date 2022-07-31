@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gcirilo.ygocollection.domain.model.Card
 import com.gcirilo.ygocollection.domain.use_case.get_card.GetCardUseCase
+import com.gcirilo.ygocollection.domain.use_case.get_collections.GetCollectionsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import com.gcirilo.ygocollection.presentation.navigation.Screen.*
 import com.gcirilo.ygocollection.util.Resource
@@ -15,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CardDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val getCardUseCase: GetCardUseCase
+    private val getCardUseCase: GetCardUseCase,
 ): ViewModel() {
 
     val id = savedStateHandle.getStateFlow(CardDetailDestination.Args.CardId.key, 0L)

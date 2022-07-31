@@ -86,6 +86,19 @@ sealed class Screen(route: String, val title: String? = null, private val args: 
         }
     }
 
+    object CardCollectionFormDestination: Screen(
+        route = "cardCollectionFormDialog",
+        args = Args.values().toList()
+    ){
+        enum class Args(
+            override var isOptional: Boolean = false,
+            override var key: String,
+            override var type: NavType<*> = NavType.StringType
+        ) : Arguments {
+            CardId(key = "cardId", type = NavType.LongType),
+        }
+    }
+
     interface Arguments {
         val isOptional: Boolean
         val key: String

@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.dialog
 import androidx.navigation.navigation
+import com.gcirilo.ygocollection.presentation.card_collection_form.CardCollectionFormDialog
 import com.gcirilo.ygocollection.presentation.card_detail.CardDetailScreen
 import com.gcirilo.ygocollection.presentation.card_list.CardListScreen
 import com.gcirilo.ygocollection.presentation.collection_form.CollectionFormDialog
@@ -30,7 +31,7 @@ fun NavGraphBuilder.mainNavGraph(
             route = Screen.CardDetailDestination.route,
             arguments = Screen.CardDetailDestination.arguments,
         ){
-            CardDetailScreen()
+            CardDetailScreen(navController)
         }
 
         composable(
@@ -48,6 +49,17 @@ fun NavGraphBuilder.mainNavGraph(
             )
         ) {
             CollectionFormDialog(navController)
+        }
+
+        dialog(
+            route = Screen.CardCollectionFormDestination.route,
+            arguments = Screen.CardCollectionFormDestination.arguments,
+            dialogProperties = DialogProperties(
+                dismissOnBackPress = true,
+                dismissOnClickOutside = true,
+            )
+        ) {
+            CardCollectionFormDialog(navController)
         }
 
     }

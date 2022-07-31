@@ -3,6 +3,7 @@ package com.gcirilo.ygocollection.presentation.card_detail
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -12,24 +13,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import com.gcirilo.ygocollection.domain.model.Card
+import com.gcirilo.ygocollection.presentation.navigation.Screen
 import com.gcirilo.ygocollection.presentation.ui.theme.YGOCollectionTheme
 
 @Composable
-fun CardDetailScreen() {
+fun CardDetailScreen(navController: NavController) {
     val viewModel: CardDetailViewModel = hiltViewModel()
     val card: Card? by viewModel.card.collectAsState()
     val shouldShowLoadingIndicator by viewModel.shouldShowLoadingIndicator.collectAsState()
-    CardDetailScreenContent(card, shouldShowLoadingIndicator)
+    CardDetailScreenContent(card, shouldShowLoadingIndicator, navController)
 }
 
 @Composable
 fun CardDetailScreenContent(
     card: Card?,
     shouldShowLoadingIndicator: Boolean,
+    navController: NavController,
 ){
     Column(
         modifier = Modifier
@@ -59,6 +64,15 @@ fun CardDetailScreenContent(
             Text(text = "Ebay: ${card.avgEbayPrice}")
             Text(text = "Amazon: ${card.avgAmazonPrice}")
             Text(text = "TCGPlayer: ${card.avgTcgplayerPrice}")
+            Button(onClick = {
+                navController.navigate(Screen.CardCollectionFormDestination.createRoute(
+                    mapOf(
+                        Screen.CardCollectionFormDestination.Args.CardId to card.id
+                    )
+                ))
+            }) {
+                Text(text = "Add to collection")
+            }
         }else if(shouldShowLoadingIndicator) {
             CircularProgressIndicator()
         }
@@ -88,6 +102,6 @@ fun CardDetailScreenPreview(){
             linkMarkers = null,
             race = "Effect Monster"
 
-        ), false)
+        ), false, rememberNavController())
     }
 }
