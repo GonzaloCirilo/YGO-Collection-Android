@@ -16,13 +16,13 @@ import com.gcirilo.ygocollection.presentation.card_list.CardListEvent
 import com.gcirilo.ygocollection.presentation.ui.theme.YGOCollectionTheme
 
 @Composable
-fun CardListItem(card: CardListing, onEvent: (CardListEvent) -> Unit = {}) {
+fun CardListItem(card: CardListing, onCardSelected: (Long) -> Unit = {}) {
     Column(modifier = Modifier.aspectRatio(0.69f).fillMaxWidth()) {
         SubcomposeAsyncImage(
             model = card.imageUrl,
             contentDescription = card.name,
             modifier = Modifier.fillMaxWidth().clickable {
-                onEvent(CardListEvent.OnCardSelected(card.id))
+                onCardSelected(card.id)
             }
         ) {
             when (painter.state){

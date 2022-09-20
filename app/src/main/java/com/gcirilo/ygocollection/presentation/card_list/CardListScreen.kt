@@ -83,7 +83,7 @@ fun CardListScreenContent(
                     onEvent(query)
                 }
             )
-            CardListGrid(cards = cards, onEvent = onEvent)
+            CardListGrid(cards = cards, onCardSelected = { onEvent(CardListEvent.OnCardSelected(it)) })
         }
 
     }

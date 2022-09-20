@@ -23,11 +23,13 @@ sealed class Screen(route: String, val title: String? = null, private val args: 
                     "/{${it.key}}"
                 }
             )
-            append(
-                optionalArgs.joinToString(separator = "&", prefix = "?") {
-                    "${it.key}={${it.key}}"
-                }
-            )
+            if(optionalArgs.isNotEmpty()){
+                append(
+                    optionalArgs.joinToString(separator = "&", prefix = "?") {
+                        "${it.key}={${it.key}}"
+                    }
+                )
+            }
         }.toString()
     }
 
@@ -96,6 +98,19 @@ sealed class Screen(route: String, val title: String? = null, private val args: 
             override var type: NavType<*> = NavType.StringType
         ) : Arguments {
             CardId(key = "cardId", type = NavType.LongType),
+        }
+    }
+
+    object CollectionDetailDestination: Screen(
+        route = "collectionDetail",
+        args = Args.values().toList()
+    ){
+        enum class Args(
+            override var isOptional: Boolean = false,
+            override var key: String,
+            override var type: NavType<*> = NavType.StringType
+        ) : Arguments {
+            CollectionId(key = "collectionId", type = NavType.LongType),
         }
     }
 

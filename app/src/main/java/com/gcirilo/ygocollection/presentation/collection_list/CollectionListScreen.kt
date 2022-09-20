@@ -1,6 +1,7 @@
 package com.gcirilo.ygocollection.presentation.collection_list
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -23,6 +24,7 @@ import com.gcirilo.ygocollection.domain.model.Collection
 import com.gcirilo.ygocollection.domain.model.CollectionForm
 import com.gcirilo.ygocollection.presentation.collection_list.components.CoilImage
 import com.gcirilo.ygocollection.presentation.navigation.Screen
+import com.gcirilo.ygocollection.presentation.navigation.Screen.CollectionDetailDestination.Args.CollectionId
 import com.gcirilo.ygocollection.presentation.ui.theme.YGOCollectionTheme
 
 @Composable
@@ -55,7 +57,11 @@ fun CollectionListScreenContent(collections: List<Collection>, navController: Na
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             items(collections) { collection ->
-                Column(Modifier.padding(4.dp)) {
+                Column(Modifier.padding(4.dp).clickable{
+                    navController.navigate(Screen.CollectionDetailDestination.createRoute(
+                        mapOf(CollectionId to collection.id)
+                    ))
+                }) {
                     if (collection.artworkUrls.isNotEmpty()) {
                         if (collection.artworkUrls.size == 1) {
                             CardArtworkImage(url = collection.artworkUrls.first())

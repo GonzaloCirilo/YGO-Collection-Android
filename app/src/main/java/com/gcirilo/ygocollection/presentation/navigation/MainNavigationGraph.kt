@@ -10,6 +10,7 @@ import androidx.navigation.navigation
 import com.gcirilo.ygocollection.presentation.card_collection_form.CardCollectionFormDialog
 import com.gcirilo.ygocollection.presentation.card_detail.CardDetailScreen
 import com.gcirilo.ygocollection.presentation.card_list.CardListScreen
+import com.gcirilo.ygocollection.presentation.collection_detail.CollectionDetailScreen
 import com.gcirilo.ygocollection.presentation.collection_form.CollectionFormDialog
 import com.gcirilo.ygocollection.presentation.collection_list.CollectionListScreen
 
@@ -38,6 +39,13 @@ fun NavGraphBuilder.mainNavGraph(
             route = BottomNavScreen.CollectionListDestination.route,
         ){
             CollectionListScreen(navController)
+        }
+
+        composable(
+            route = Screen.CollectionDetailDestination.route,
+            arguments = Screen.CollectionDetailDestination.arguments,
+        ) {
+            CollectionDetailScreen()
         }
 
         dialog(
