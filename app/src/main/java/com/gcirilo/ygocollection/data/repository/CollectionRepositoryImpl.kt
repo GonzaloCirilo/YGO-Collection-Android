@@ -32,8 +32,8 @@ class CollectionRepositoryImpl @Inject constructor(
         collectionDao.deleteCollections(collection.toCollectionEntity())
     }
 
-    override suspend fun getCollection(id: Long): CollectionCards {
-        return collectionDao.getCollection(id).toCollectionCards()
+    override suspend fun getCollection(id: Long): Flow<CollectionCards> {
+        return collectionDao.getCollection(id).map { it.toCollectionCards() }
     }
 
     override suspend fun saveCollection(collection: CollectionForm) {

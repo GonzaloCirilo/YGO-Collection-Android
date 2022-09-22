@@ -29,13 +29,13 @@ class CollectionFormViewModel @Inject constructor(
         viewModelScope.launch{
             savedStateHandle.getStateFlow(Screen.CollectionFormDestination.Args.CollectionId.key, 0L).collect{
                 if(it != 0L) {
-                    val result = getCollectionUseCase(it)
-                    _collection.update { result.toCollectionForm() }
+                    getCollectionUseCase(it).collect{ collectionCards ->
+                        _collection.update { collectionCards.toCollectionForm() }
+                    }
                 }
             }
         }
     }
-
 
     fun onNameChange(newValue: String) {
         _collection.update { it.copy(name = newValue) }

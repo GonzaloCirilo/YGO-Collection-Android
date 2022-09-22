@@ -16,7 +16,7 @@ interface CollectionDao {
         SELECT * FROM collection_entity
         WHERE id LIKE :id
     """)
-    suspend fun getCollection(id: Long): CollectionAndAllCards
+    fun getCollection(id: Long): Flow<CollectionAndAllCards>
 
     @Query("""
         SELECT * FROM collection_entity

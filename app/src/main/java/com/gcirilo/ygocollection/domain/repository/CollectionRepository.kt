@@ -10,7 +10,7 @@ interface CollectionRepository {
 
     suspend fun deleteCollection(collection: Collection)
 
-    suspend fun getCollection(id: Long): CollectionCards
+    suspend fun getCollection(id: Long): Flow<CollectionCards>
 
     suspend fun saveCollection(collection: CollectionForm)
 

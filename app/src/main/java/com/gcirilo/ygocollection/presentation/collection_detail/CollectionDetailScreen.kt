@@ -17,11 +17,17 @@ import com.gcirilo.ygocollection.presentation.ui.theme.YGOCollectionTheme
 fun CollectionDetailScreen() {
     val viewModel: CollectionDetailViewModel = hiltViewModel()
     val cardCollection: CollectionCards? by viewModel.collection.collectAsState()
-    CollectionDetailScreenContent(collectionCards = cardCollection)
+    CollectionDetailScreenContent(
+        collectionCards = cardCollection,
+        onCardSelected = { viewModel.onDeleteCard(it) }
+    )
 }
 
 @Composable
-fun CollectionDetailScreenContent(collectionCards: CollectionCards?) {
+fun CollectionDetailScreenContent(
+    collectionCards: CollectionCards?,
+    onCardSelected: (Long)->Unit = {},
+) {
     if (collectionCards != null) {
         Column {
             Text(text = collectionCards.name, fontSize = 36.sp)
@@ -39,7 +45,8 @@ fun CollectionDetailScreenContent(collectionCards: CollectionCards?) {
                             scale = it.scale,
                             linkval = it.linkval
                         )
-                    }
+                    },
+                    onCardSelected = onCardSelected
                 )
             }
         }
