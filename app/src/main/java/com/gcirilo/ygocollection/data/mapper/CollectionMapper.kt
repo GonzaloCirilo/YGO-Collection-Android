@@ -14,7 +14,8 @@ fun CollectionAndAllCards.toCollection(): Collection {
     return Collection(
         id = collectionEntity.id,
         name = collectionEntity.name,
-        artworkUrls = topCards.map { it.imageUrl.replace("pics", "pics_artgame") },
+        // TODO consider value object for ArtworkImage
+        artworkUrls = topCards.map { it.imageUrl.replace("cards", "cards_cropped") },
         cardCount = cards.size.toLong(),
     )
 }
