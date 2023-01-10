@@ -18,6 +18,7 @@ interface CollectionDao {
     """)
     fun getCollection(id: Long): Flow<CollectionAndAllCards>
 
+    @Transaction
     @Query("""
         SELECT * FROM collection_entity
     """)

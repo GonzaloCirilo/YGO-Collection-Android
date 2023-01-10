@@ -21,13 +21,18 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.gcirilo.ygocollection.domain.model.Collection
+import com.gcirilo.ygocollection.presentation.SnackBarCallback
 import com.gcirilo.ygocollection.presentation.ui.theme.DarkBlueLight
 import com.gcirilo.ygocollection.presentation.ui.theme.YGOCollectionTheme
 
 @Composable
-fun CardCollectionFormDialog(navController: NavController) {
+fun CardCollectionFormDialog(
+    navController: NavController,
+    snackBarCallback: SnackBarCallback,
+) {
     val viewModel: CardCollectionFormViewModel = hiltViewModel()
     val collections by viewModel.collections.collectAsState()
+
     CardCollectionFormDialogContent(
         collections = collections,
         navController = navController,
@@ -35,6 +40,7 @@ fun CardCollectionFormDialog(navController: NavController) {
             viewModel.onCollectionSelected(it)
         },
         onSaveCardToCollection = {
+            snackBarCallback("Added To Collection", SnackbarDuration.Short)
             viewModel.onSaveToCollection()
         }
     )
@@ -52,11 +58,15 @@ fun CardCollectionFormDialogContent(
         .clip(RoundedCornerShape(12.dp))
         .background(DarkBlueLight),
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier
+            .padding(16.dp)) {
             Text(text = "Add to collection")
-            CollectionsDropDown(collections = collections) {
-                onCollectionSelected(it)
-            }
+            CollectionsDropDown(
+                collections = collections,
+                onSelected =  {
+                 onCollectionSelected(it)
+                },
+            )
             Button(onClick = {
                 onSaveCardToCollection()
                 navController.popBackStack()

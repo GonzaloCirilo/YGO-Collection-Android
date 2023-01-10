@@ -1,25 +1,28 @@
 package com.gcirilo.ygocollection.presentation
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.gcirilo.ygocollection.presentation.card_list.CardListScreen
 import com.gcirilo.ygocollection.presentation.navigation.BottomNavScreen
 import com.gcirilo.ygocollection.presentation.navigation.NavGraphDestinations
 import com.gcirilo.ygocollection.presentation.navigation.mainNavGraph
 import com.gcirilo.ygocollection.presentation.ui.theme.YGOCollectionTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+
+typealias SnackBarCallback = (String,SnackbarDuration)->Unit
 
 @AndroidEntryPoint
 @ExperimentalMaterialApi
@@ -29,22 +32,38 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             YGOCollectionTheme {
-                val navController = rememberNavController()
-                Scaffold(
-                    bottomBar = { BottomBarNavigation(navController = navController) },
-                ) { paddingValues ->
-                    // A surface container using the 'background' color from the theme
-                    Surface(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(paddingValues),
-                        color = MaterialTheme.colors.background
-                    ) {
-                        NavHost(navController, startDestination = NavGraphDestinations.Main.route) {
-                            mainNavGraph(navController)
+                MainYGOComposable()
+            }
+        }
+    }
+}
+
+@ExperimentalMaterialApi
+@Composable
+fun MainYGOComposable() {
+    val navController = rememberNavController()
+    val scaffoldState: ScaffoldState = rememberScaffoldState()
+    val coroutineScope = rememberCoroutineScope()
+    Scaffold(
+        scaffoldState = scaffoldState,
+        bottomBar = { BottomBarNavigation(navController = navController) },
+    ) { paddingValues ->
+        // A surface container using the 'background' color from the theme
+        Surface(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
+            color = MaterialTheme.colors.background
+        ) {
+            NavHost(navController, startDestination = NavGraphDestinations.Main.route) {
+                mainNavGraph(
+                    navController,
+                    snackBarCallback = { message, duration ->
+                        coroutineScope.launch {
+                            scaffoldState.snackbarHostState.showSnackbar(message, duration = duration)
                         }
                     }
-                }
+                )
             }
         }
     }

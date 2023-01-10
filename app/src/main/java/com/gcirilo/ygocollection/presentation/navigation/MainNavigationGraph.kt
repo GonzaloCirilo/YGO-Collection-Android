@@ -1,12 +1,15 @@
 package com.gcirilo.ygocollection.presentation.navigation
 
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ScaffoldState
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.dialog
 import androidx.navigation.navigation
+import com.gcirilo.ygocollection.presentation.SnackBarCallback
 import com.gcirilo.ygocollection.presentation.card_collection_form.CardCollectionFormDialog
 import com.gcirilo.ygocollection.presentation.card_detail.CardDetailScreen
 import com.gcirilo.ygocollection.presentation.card_list.CardListScreen
@@ -17,6 +20,7 @@ import com.gcirilo.ygocollection.presentation.collection_list.CollectionListScre
 @ExperimentalMaterialApi
 fun NavGraphBuilder.mainNavGraph(
     navController: NavHostController,
+    snackBarCallback: SnackBarCallback,
 ){
     navigation(
         startDestination = BottomNavScreen.CardListDestination.route,
@@ -56,7 +60,7 @@ fun NavGraphBuilder.mainNavGraph(
                 dismissOnClickOutside = true,
             )
         ) {
-            CollectionFormDialog(navController)
+            CollectionFormDialog(navController, snackBarCallback)
         }
 
         dialog(
@@ -67,7 +71,7 @@ fun NavGraphBuilder.mainNavGraph(
                 dismissOnClickOutside = true,
             )
         ) {
-            CardCollectionFormDialog(navController)
+            CardCollectionFormDialog(navController, snackBarCallback)
         }
 
     }

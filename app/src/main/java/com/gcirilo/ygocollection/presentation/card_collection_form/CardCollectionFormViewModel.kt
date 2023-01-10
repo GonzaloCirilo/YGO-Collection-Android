@@ -8,9 +8,7 @@ import com.gcirilo.ygocollection.domain.use_case.add_card_to_collection.AddCardT
 import com.gcirilo.ygocollection.domain.use_case.get_collections.GetCollectionsUseCase
 import com.gcirilo.ygocollection.presentation.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
