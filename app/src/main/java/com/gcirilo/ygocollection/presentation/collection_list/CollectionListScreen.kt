@@ -140,6 +140,7 @@ fun CollectionCard(collection: Collection, onClick: () -> Unit = {}) {
                     imageVector = Icons.Filled.Menu,
                     contentDescription = "no image",
                     modifier = Modifier
+                        .aspectRatio(1.0f)
                         .fillMaxSize()
                         .background(Color.Cyan)
                 )
