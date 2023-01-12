@@ -103,6 +103,9 @@ fun CollectionsDropDown(collections: List<Collection>, onSelected: (Long)->Unit 
             onValueChange = { mSelectedText = it },
             modifier = Modifier
                 .fillMaxWidth()
+                .clickable {
+                    mExpanded = !mExpanded
+                }
                 .onGloballyPositioned { coordinates ->
                     // This value is used to assign to
                     // the DropDown the same width
@@ -112,7 +115,8 @@ fun CollectionsDropDown(collections: List<Collection>, onSelected: (Long)->Unit 
             trailingIcon = {
                 Icon(icon, "contentDescription",
                     Modifier.clickable { mExpanded = !mExpanded })
-            }
+            },
+            enabled = false
         )
 
         DropdownMenu(
