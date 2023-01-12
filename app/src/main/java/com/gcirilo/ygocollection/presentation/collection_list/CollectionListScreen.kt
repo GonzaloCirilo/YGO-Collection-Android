@@ -1,8 +1,10 @@
 package com.gcirilo.ygocollection.presentation.collection_list
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -15,6 +17,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
@@ -115,10 +118,9 @@ fun AddFloatingActionButton(onClick: () -> Unit) {
 }
 
 @Composable
-fun CardArtworkImage(url: String, onClick: (() -> Unit)? = null) {
+fun CardArtworkImage(url: String, modifier: Modifier = Modifier) {
     Column(
-        modifier = Modifier
-            .clickable(enabled = onClick != null) { onClick?.invoke() }
+        modifier = modifier
             .aspectRatio(1.0f)
             .fillMaxWidth()
     ) {
@@ -128,13 +130,16 @@ fun CardArtworkImage(url: String, onClick: (() -> Unit)? = null) {
 
 @Composable
 fun CollectionCard(collection: Collection, onClick: () -> Unit = {}) {
-    Card(elevation = 8.dp) {
-        Column(
-            Modifier
-                .padding(4.dp)
-                .clickable {
-                    onClick()
-                }) {
+    val interactionSource = remember { MutableInteractionSource() }
+    Card(
+        elevation = 8.dp,
+        modifier = Modifier.clickable(
+            interactionSource = interactionSource,
+            indication = LocalIndication.current,
+            onClick = onClick
+        )
+    ) {
+        Column(Modifier.padding(4.dp)) {
             if (collection.artworkUrls.isNotEmpty()) {
                 if (collection.artworkUrls.size == 1) {
                     CardArtworkImage(url = collection.artworkUrls.first())
