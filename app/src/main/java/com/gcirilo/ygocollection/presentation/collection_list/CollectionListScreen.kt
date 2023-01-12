@@ -78,8 +78,9 @@ fun CollectionListScreenContent(collections: List<Collection>, onScreenEvent: (C
         LazyVerticalGrid(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding),
-            columns = GridCells.Adaptive(200.dp),
+                .padding(padding)
+                .padding(8.dp),
+            columns = GridCells.Adaptive(180.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
@@ -89,7 +90,8 @@ fun CollectionListScreenContent(collections: List<Collection>, onScreenEvent: (C
                 Text(
                     text = "My Collections",
                     fontSize = 30.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(top = 10.dp)
                 )
             }
             items(collections) { collection ->
