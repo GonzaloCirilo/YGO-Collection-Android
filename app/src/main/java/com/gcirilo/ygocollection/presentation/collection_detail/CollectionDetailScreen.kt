@@ -1,11 +1,16 @@
 package com.gcirilo.ygocollection.presentation.collection_detail
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gcirilo.ygocollection.domain.model.CardListing
@@ -29,8 +34,17 @@ fun CollectionDetailScreenContent(
     onCardSelected: (Long)->Unit = {},
 ) {
     if (collectionCards != null) {
-        Column {
-            Text(text = collectionCards.name, fontSize = 36.sp)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp)
+        ) {
+            Text(
+                text = collectionCards.name,
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(top = 10.dp)
+            )
             if (collectionCards.cards.isNotEmpty()) {
                 CardListGrid(
                     cards = collectionCards.cards.map {
