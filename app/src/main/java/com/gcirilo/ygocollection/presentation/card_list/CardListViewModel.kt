@@ -42,9 +42,7 @@ class CardListViewModel @Inject constructor(
     val navEvent: SharedFlow<NavTarget> = _navEvent
 
     init {
-        viewModelScope.launch {
-            getArchetypes()
-        }
+        resetFilterValues()
     }
 
     fun onEvent(event: CardListEvent) {
@@ -81,7 +79,7 @@ class CardListViewModel @Inject constructor(
                 )
 
                 if(event.query !is CardQueryItemType.NameSearch){ // if is not a name search
-                    getArchetypes() // reset the filter Query Search
+                    resetFilterValues()
                 }
                 searchCardQueryJob?.cancel()
                 searchCardQueryJob = viewModelScope.launch {
@@ -95,8 +93,7 @@ class CardListViewModel @Inject constructor(
                 searchArchetypeJob?.cancel()
                 searchArchetypeJob = viewModelScope.launch {
                     delay(500L)
-                    getArchetypes()
-                    filterMonsterSpellTrapCardRace()
+                    resetFilterValues()
                 }
             }
             is CardListEvent.Refresh -> {}
@@ -143,5 +140,10 @@ class CardListViewModel @Inject constructor(
             }
         )
 
+    }
+
+    private fun resetFilterValues() {
+        getArchetypes()
+        filterMonsterSpellTrapCardRace()
     }
 }
