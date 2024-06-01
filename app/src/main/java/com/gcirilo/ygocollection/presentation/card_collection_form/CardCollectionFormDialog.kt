@@ -61,17 +61,21 @@ fun CardCollectionFormDialogContent(
         Column(modifier = Modifier
             .padding(16.dp)) {
             Text(text = "Add to collection")
-            CollectionsDropDown(
-                collections = collections,
-                onSelected =  {
-                 onCollectionSelected(it)
-                },
-            )
-            Button(onClick = {
-                onSaveCardToCollection()
-                navController.popBackStack()
-            }) {
-                Text(text = "Add")
+            if (collections.isNotEmpty()) {
+                CollectionsDropDown(
+                    collections = collections,
+                    onSelected = {
+                        onCollectionSelected(it)
+                    },
+                )
+                Button(onClick = {
+                    onSaveCardToCollection()
+                    navController.popBackStack()
+                }) {
+                    Text(text = "Add")
+                }
+            } else {
+                NoCollectionMessage()
             }
         }
     }
@@ -135,6 +139,16 @@ fun CollectionsDropDown(collections: List<Collection>, onSelected: (Long)->Unit 
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun NoCollectionMessage() {
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Text(text = "No collections found")
     }
 }
 
