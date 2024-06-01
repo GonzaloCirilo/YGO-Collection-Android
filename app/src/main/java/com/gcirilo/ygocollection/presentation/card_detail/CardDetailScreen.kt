@@ -1,5 +1,7 @@
 package com.gcirilo.ygocollection.presentation.card_detail
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -32,6 +34,7 @@ fun CardDetailScreen(navController: NavController) {
     CardDetailScreenContent(card, shouldShowLoadingIndicator, navController)
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CardDetailScreenContent(
     card: Card?,
@@ -67,7 +70,7 @@ fun CardDetailScreenContent(
             ) {
                 Text(
                     text = card.name,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(1f).basicMarquee(),
                 )
                 Button(onClick = {
                     navController.navigate(Screen.CardCollectionFormDestination.createRoute(
