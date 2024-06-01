@@ -9,9 +9,11 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -39,6 +41,7 @@ fun CardDetailScreenContent(
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
+            .padding(horizontal = 4.dp)
             .fillMaxSize(),
     ) {
         if(card != null) {
@@ -58,21 +61,30 @@ fun CardDetailScreenContent(
                     }
                 }
             }
-            Text(text = card.name)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = card.name,
+                    modifier = Modifier.weight(1f),
+                )
+                Button(onClick = {
+                    navController.navigate(Screen.CardCollectionFormDestination.createRoute(
+                        mapOf(
+                            Screen.CardCollectionFormDestination.Args.CardId to card.id
+                        )
+                    ))
+                }) {
+                    Text(text = "Add to collection")
+                }
+            }
             Text(text = card.desc, textAlign = TextAlign.Justify)
             Text(text = "Prices")
             Text(text = "Ebay: ${card.avgEbayPrice}")
             Text(text = "Amazon: ${card.avgAmazonPrice}")
             Text(text = "TCGPlayer: ${card.avgTcgplayerPrice}")
-            Button(onClick = {
-                navController.navigate(Screen.CardCollectionFormDestination.createRoute(
-                    mapOf(
-                        Screen.CardCollectionFormDestination.Args.CardId to card.id
-                    )
-                ))
-            }) {
-                Text(text = "Add to collection")
-            }
+
         }else if(shouldShowLoadingIndicator) {
             CircularProgressIndicator()
         }
