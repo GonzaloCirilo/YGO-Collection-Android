@@ -16,7 +16,7 @@ import com.gcirilo.ygocollection.data.local.entity.CollectionEntity
         CardCollectionEntity::class,
         CollectionEntity::class,
     ],
-    version = 4,
+    version = 5,
     exportSchema = false,
 )
 abstract class YGOCollectionDatabase: RoomDatabase() {

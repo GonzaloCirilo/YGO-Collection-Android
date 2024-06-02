@@ -75,7 +75,7 @@ data class CardQuery(
             }
 
         }
-        val queryOrderString = " ORDER BY lastSeen DESC, name ASC"
+        val queryOrderString = " ORDER BY name ASC"
         if(queryFilterStrings.isNotEmpty())
             queryString += queryFilterStrings.joinToString(separator = " AND ", prefix = " WHERE ")
         queryString += queryOrderString

@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
@@ -48,7 +49,7 @@ fun CollectionListScreen(navController: NavController) {
     CollectionListScreenContent(
         collections = collections,
         onScreenEvent = {
-            when(val event = it) {
+            when (val event = it) {
                 AddButtonClicked -> {
                     navController.navigate(
                         Screen.CollectionFormDestination.createRoute(
@@ -58,6 +59,7 @@ fun CollectionListScreen(navController: NavController) {
                         )
                     )
                 }
+
                 is CollectionClicked -> {
                     navController.navigate(
                         Screen.CollectionDetailDestination.createRoute(
@@ -78,30 +80,39 @@ fun CollectionListScreenContent(collections: List<Collection>, onScreenEvent: (C
             AddFloatingActionButton(onClick = { onScreenEvent(AddButtonClicked) })
         }
     ) { padding ->
-        LazyVerticalGrid(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(8.dp),
-            columns = GridCells.Adaptive(180.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            item(
-                span = { GridItemSpan(maxCurrentLineSpan) }
+        if (collections.isNotEmpty()) {
+            LazyVerticalGrid(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .padding(8.dp),
+                columns = GridCells.Adaptive(180.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                Text(
-                    text = "My Collections",
-                    fontSize = 30.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(top = 10.dp)
-                )
+                item(
+                    span = { GridItemSpan(maxCurrentLineSpan) }
+                ) {
+                    Text(
+                        text = "My Collections",
+                        fontSize = 30.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(top = 10.dp)
+                    )
+                }
+                items(collections) { collection ->
+                    CollectionCard(
+                        collection = collection,
+                        onClick = { onScreenEvent(CollectionClicked(collection.id)) },
+                    )
+                }
             }
-            items(collections) { collection ->
-                CollectionCard(
-                    collection = collection,
-                    onClick = { onScreenEvent(CollectionClicked(collection.id)) },
-                )
+        } else {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(text = "No collections", fontSize = 24.sp, fontStyle = FontStyle.Italic)
             }
         }
     }
