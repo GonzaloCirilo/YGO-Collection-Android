@@ -14,9 +14,17 @@ data class CardCollectionEntity(
     @PrimaryKey(autoGenerate = true) val id: Long,
     val cardId: Long,
     val collectionId: Long,
+    val quantity: Int
 )
 
 data class CardIdAndCollectionId (
+    val id: Long? = null,
     val cardId: Long,
-    val collectionId: Long
+    val collectionId: Long,
+    val quantity: Int
+)
+
+data class CardIdAndCollectionIdDelete (
+    val cardId: Long,
+    val collectionId: Long,
 )

@@ -2,9 +2,12 @@ package com.gcirilo.ygocollection.data.repository
 
 import com.gcirilo.ygocollection.data.local.entity.CardIdAndCollectionId
 import com.gcirilo.ygocollection.data.local.YGOCollectionDatabase
+import com.gcirilo.ygocollection.data.local.entity.CardIdAndCollectionIdDelete
 import com.gcirilo.ygocollection.data.mapper.toCollection
 import com.gcirilo.ygocollection.data.mapper.toCollectionCards
 import com.gcirilo.ygocollection.data.mapper.toCollectionEntity
+import com.gcirilo.ygocollection.domain.model.CardCollection
+import com.gcirilo.ygocollection.domain.model.CardQuantity
 import com.gcirilo.ygocollection.domain.model.Collection
 import com.gcirilo.ygocollection.domain.model.CollectionCards
 import com.gcirilo.ygocollection.domain.model.CollectionForm
@@ -40,16 +43,23 @@ class CollectionRepositoryImpl @Inject constructor(
         collectionDao.insertCollection(collection.toCollectionEntity())
     }
 
-    override suspend fun addCardsToCollection(collectionId: Long, vararg cardIds: Long) {
+    override suspend fun addCardsToCollection(id: Long?, collectionId: Long, vararg cards: CardQuantity) {
         cardCollectionDao.insertByCardIdAndCollectionId(
-            *cardIds.map { CardIdAndCollectionId(collectionId = collectionId, cardId = it) }.toTypedArray()
+            *cards.map { CardIdAndCollectionId(collectionId = collectionId, cardId = it.cardId, quantity = it.quantity, id = id) }.toTypedArray()
         )
     }
 
     override suspend fun removeCardsFromCollection(collectionId: Long, vararg cardIds: Long) {
         cardCollectionDao.deleteByCardIdAndCollectionId(
-            *cardIds.map { CardIdAndCollectionId(collectionId = collectionId, cardId = it) }.toTypedArray()
+            *cardIds.map { CardIdAndCollectionIdDelete(collectionId = collectionId, cardId = it) }.toTypedArray()
         )
+    }
+
+    override suspend fun getCardCollection(cardId: Long, collectionId: Long): CardCollection? {
+        cardCollectionDao.getCardCollection(cardId, collectionId)?.let {
+            return CardCollection(it.id, it.cardId, it.collectionId, it.quantity)
+        }
+        return null
     }
 
 }
