@@ -3,7 +3,7 @@ package com.gcirilo.ygocollection.data.repository
 import android.util.Log
 import androidx.paging.*
 import androidx.room.withTransaction
-import com.gcirilo.ygocollection.data.local.CardEntity
+import com.gcirilo.ygocollection.data.local.entity.CardEntity
 import com.gcirilo.ygocollection.domain.model.CardQuery
 import com.gcirilo.ygocollection.data.local.RemoteKey
 import com.gcirilo.ygocollection.data.local.YGOCollectionDatabase

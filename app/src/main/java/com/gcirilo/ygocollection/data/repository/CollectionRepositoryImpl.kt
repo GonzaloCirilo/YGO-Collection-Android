@@ -1,6 +1,6 @@
 package com.gcirilo.ygocollection.data.repository
 
-import com.gcirilo.ygocollection.data.local.CardIdAndCollectionId
+import com.gcirilo.ygocollection.data.local.entity.CardIdAndCollectionId
 import com.gcirilo.ygocollection.data.local.YGOCollectionDatabase
 import com.gcirilo.ygocollection.data.mapper.toCollection
 import com.gcirilo.ygocollection.data.mapper.toCollectionCards

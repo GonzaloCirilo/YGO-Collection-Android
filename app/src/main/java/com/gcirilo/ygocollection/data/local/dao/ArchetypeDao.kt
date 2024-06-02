@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.gcirilo.ygocollection.data.local.ArchetypeEntity
+import com.gcirilo.ygocollection.data.local.entity.ArchetypeEntity
 
 @Dao
 interface ArchetypeDao {

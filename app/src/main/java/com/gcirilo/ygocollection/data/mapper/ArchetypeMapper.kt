@@ -1,6 +1,6 @@
 package com.gcirilo.ygocollection.data.mapper
 
-import com.gcirilo.ygocollection.data.local.ArchetypeEntity
+import com.gcirilo.ygocollection.data.local.entity.ArchetypeEntity
 import com.gcirilo.ygocollection.data.remote.dto.ArchetypeDto
 import com.gcirilo.ygocollection.domain.model.Archetype
 

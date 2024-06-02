@@ -1,6 +1,6 @@
 package com.gcirilo.ygocollection.data.mapper
 
-import com.gcirilo.ygocollection.data.local.CardEntity
+import com.gcirilo.ygocollection.data.local.entity.CardEntity
 import com.gcirilo.ygocollection.data.remote.dto.CardDto
 import com.gcirilo.ygocollection.domain.model.Card
 import com.gcirilo.ygocollection.domain.model.CardListing

@@ -1,7 +1,7 @@
 package com.gcirilo.ygocollection.data.mapper
 
-import com.gcirilo.ygocollection.data.local.CollectionAndAllCards
-import com.gcirilo.ygocollection.data.local.CollectionEntity
+import com.gcirilo.ygocollection.data.local.entity.CollectionAndAllCards
+import com.gcirilo.ygocollection.data.local.entity.CollectionEntity
 import com.gcirilo.ygocollection.domain.model.Collection
 import com.gcirilo.ygocollection.domain.model.CollectionCards
 import com.gcirilo.ygocollection.domain.model.CollectionForm

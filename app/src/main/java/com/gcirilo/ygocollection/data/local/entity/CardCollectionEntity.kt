@@ -1,4 +1,4 @@
-package com.gcirilo.ygocollection.data.local
+package com.gcirilo.ygocollection.data.local.entity
 
 import androidx.room.Entity
 import androidx.room.Index

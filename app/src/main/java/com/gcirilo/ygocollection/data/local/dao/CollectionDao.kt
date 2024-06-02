@@ -1,8 +1,8 @@
 package com.gcirilo.ygocollection.data.local.dao
 
 import androidx.room.*
-import com.gcirilo.ygocollection.data.local.CollectionAndAllCards
-import com.gcirilo.ygocollection.data.local.CollectionEntity
+import com.gcirilo.ygocollection.data.local.entity.CollectionAndAllCards
+import com.gcirilo.ygocollection.data.local.entity.CollectionEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

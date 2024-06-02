@@ -3,7 +3,7 @@ package com.gcirilo.ygocollection.data.local.dao
 import androidx.paging.PagingSource
 import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteQuery
-import com.gcirilo.ygocollection.data.local.CardEntity
+import com.gcirilo.ygocollection.data.local.entity.CardEntity
 
 @Dao
 interface CardDao {
