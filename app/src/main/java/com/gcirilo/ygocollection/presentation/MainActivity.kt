@@ -1,6 +1,7 @@
 package com.gcirilo.ygocollection.presentation
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -55,6 +57,7 @@ fun MainYGOComposable() {
                 .padding(paddingValues),
             color = MaterialTheme.colors.background
         ) {
+            val currentContext = LocalContext.current
             NavHost(navController, startDestination = NavGraphDestinations.Main.route) {
                 mainNavGraph(
                     navController,
@@ -62,6 +65,7 @@ fun MainYGOComposable() {
                         coroutineScope.launch {
                             scaffoldState.snackbarHostState.showSnackbar(message, duration = duration)
                         }
+                        Intent(currentContext, MainActivity::class.java)
                     }
                 )
             }

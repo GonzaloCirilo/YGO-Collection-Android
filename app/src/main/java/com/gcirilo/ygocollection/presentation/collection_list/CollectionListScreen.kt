@@ -1,5 +1,6 @@
 package com.gcirilo.ygocollection.presentation.collection_list
 
+import android.widget.ImageView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
@@ -21,12 +22,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.gcirilo.ygocollection.domain.model.Collection
@@ -70,6 +72,10 @@ fun CollectionListScreen(navController: NavController) {
             }
         }
     )
+    val context = LocalContext.current
+    AndroidView<ImageView>(factory = { ImageView(it) }) {
+        context
+    }
 }
 
 @Composable
